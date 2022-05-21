@@ -16,7 +16,7 @@ const writeStream = createWriteStream(
   'utf-8'
 )
 
-input.write('Введите текст\n')
+output.write('Введите текст\n')
 rl.on('line', input => {
   if (input === 'exit') exit()
   writeStream.write(`${input}\n`)
