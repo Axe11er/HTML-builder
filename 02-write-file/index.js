@@ -7,22 +7,20 @@ const {
 const { createWriteStream } = require('fs')
 const { join } = require('path')
 
-const rl = readline.createInterface({ input, output })
+const rl = readline.createInterface({
+  input,
+  output,
+})
 const writeStream = createWriteStream(
   join(__dirname, 'text.txt'),
   'utf-8'
 )
 
-rl.question('Введите текст\n', answer => {
-  if (answer === 'exit') {
-    exit()
-  }
-  writeStream.write(`${answer}\n`)
-})
+input.write('Введите текст\n')
 rl.on('line', input => {
-  if (input === 'exit') {
-    exit()
-  }
+  if (input === 'exit') exit()
   writeStream.write(`${input}\n`)
 })
-process.on('exit', () => output.write('Хорошего дня!'))
+process.on('exit', () =>
+  output.write('Хорошего дня!')
+)

@@ -7,7 +7,7 @@ readdir(path.join(__dirname, 'secret-folder'), {
   withFileTypes: true,
 }).then(files => {
   files
-    .filter(file => !file.isDirectory())
+    .filter(file => file.isFile())
     .forEach(file => {
       const filePath = path.join(
         __dirname,
@@ -16,9 +16,11 @@ readdir(path.join(__dirname, 'secret-folder'), {
       const parsedFile = path.parse(filePath)
       stat(filePath).then(file => {
         stdout.write(
-          `${parsedFile.name} - ${parsedFile.ext.slice(
-            1
-          )} - ${file.size}b\n`
+          `${
+            parsedFile.name
+          } - ${parsedFile.ext.slice(1)} - ${
+            file.size
+          }b\n`
         )
       })
     })
