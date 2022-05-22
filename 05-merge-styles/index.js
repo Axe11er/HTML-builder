@@ -1,47 +1,51 @@
-const { createReadStream } = require('fs')
-const {
-  readdir,
-  appendFile,
-  rm,
-} = require('fs/promises')
+const { readdir, appendFile, rm } = require('fs/promises')
 const { join, parse } = require('path')
+const { createReadStream } = require('fs')
 
 const setPath = path => join(__dirname, path)
-const filterCss = async () => {
-  const files = await readdir(
-    setPath('./styles'),
-    {
-      withFileTypes: true,
-    }
-  )
+
+const readStream = (stream, encoding = 'utf8') => {
+  stream.setEncoding(encoding)
+  return new Promise((resolve, reject) => {
+    let data = ''
+    stream.on('data', chunk => (data += chunk))
+    stream.on('end', () => resolve(data))
+    stream.on('error', error => reject(error))
+  })
+}
+
+const filterFiles = async (path, ext) => {
+  const files = await readdir(path, {
+    withFileTypes: true,
+  })
   return files.filter(
     file =>
       file.isFile() &&
-      parse(setPath(`./styles/${file.name}`))
-        .ext === '.css'
+      parse(`${path}/${file.name}`).ext === ext
   )
 }
-const mergeCss = async getStyles => {
-  await rm(setPath('./project-dist/bundle.css'), {
+const mergeFiles = async (entry, output, getFiles) => {
+  await rm(output, {
     force: true,
   })
-  const files = await getStyles
+  const files = await getFiles
   for (const file of files) {
-    const read = createReadStream(
-      setPath(`./styles/${file.name}`)
+    const cssData = await readStream(
+      createReadStream(`${entry}/${file.name}`)
     )
-    let cssData = ''
-    read.on('data', chunk => {
-      cssData += chunk
-    })
-    read.on('end', () => {
-      appendFile(
-        setPath('./project-dist/bundle.css'),
-        cssData,
-        'utf-8'
-      )
-    })
+    appendFile(output, cssData, 'utf-8')
   }
 }
 
-mergeCss(filterCss())
+const mergeCss = async (entry, output) => {
+  await mergeFiles(
+    entry,
+    output,
+    filterFiles(entry, '.css')
+  )
+}
+
+mergeCss(
+  setPath('./styles'),
+  setPath('./project-dist/bundle.css')
+)

@@ -7,12 +7,14 @@ const {
 const { createWriteStream } = require('fs')
 const { join } = require('path')
 
+const setPath = path => join(__dirname, path)
+
 const rl = readline.createInterface({
   input,
   output,
 })
 const writeStream = createWriteStream(
-  join(__dirname, 'text.txt'),
+  setPath('text.txt'),
   'utf-8'
 )
 
@@ -21,6 +23,5 @@ rl.on('line', input => {
   if (input === 'exit') exit()
   writeStream.write(`${input}\n`)
 })
-process.on('exit', () =>
-  output.write('Хорошего дня!')
-)
+
+process.on('exit', () => output.write('Хорошего дня!'))
