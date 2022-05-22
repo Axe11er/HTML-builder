@@ -58,6 +58,7 @@ const mergeFiles = async (entry, output, getFiles) => {
     force: true,
   })
   const files = await getFiles
+  files.reverse()
   for (const file of files) {
     const cssData = await readStream(
       createReadStream(`${entry}/${file.name}`)
