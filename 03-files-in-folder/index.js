@@ -1,19 +1,19 @@
 const { stat } = require('fs/promises')
 const { readdir } = require('fs/promises')
-const path = require('path')
+const { join, parse } = require('path')
 const { stdout } = require('process')
 
-readdir(path.join(__dirname, 'secret-folder'), {
+readdir(join(__dirname, 'secret-folder'), {
   withFileTypes: true,
 }).then(files => {
   files
     .filter(file => file.isFile())
     .forEach(file => {
-      const filePath = path.join(
+      const filePath = join(
         __dirname,
         `./secret-folder/${file.name}`
       )
-      const parsedFile = path.parse(filePath)
+      const parsedFile = parse(filePath)
       stat(filePath).then(file => {
         stdout.write(
           `${

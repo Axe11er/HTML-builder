@@ -1,4 +1,8 @@
-const { mkdir, readdir, copyFile } = require('fs/promises')
+const {
+  mkdir,
+  readdir,
+  copyFile,
+} = require('fs/promises')
 const { join } = require('path')
 
 const copyDirectory = async (input, output) => {
@@ -6,7 +10,7 @@ const copyDirectory = async (input, output) => {
   const files = await readdir(input, {
     withFileTypes: true,
   })
-  for (let file of files) {
+  for (const file of files) {
     const inputPath = join(input, file.name)
     const outputPath = join(output, file.name)
     file.isDirectory()

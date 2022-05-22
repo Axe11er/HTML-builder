@@ -1,9 +1,9 @@
-const fs = require('fs')
-const path = require('path')
+const { createReadStream } = require('fs')
+const { join } = require('path')
 const { stdout } = require('process')
 
-const read = fs.createReadStream(
-  path.join(__dirname, './text.txt'),
+const read = createReadStream(
+  join(__dirname, './text.txt'),
   'utf-8'
 )
 let data = ''
