@@ -25,6 +25,7 @@ const readStream = (stream, encoding = 'utf8') => {
 
 const copyDirectory = async (input, output) => {
   try {
+    await rm(output, { force: true, recursive: true })
     await mkdir(output, { recursive: true })
     const files = await readdir(input, {
       withFileTypes: true,
