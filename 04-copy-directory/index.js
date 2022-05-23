@@ -1,4 +1,3 @@
-const { rmdir } = require('fs')
 const {
   mkdir,
   readdir,
