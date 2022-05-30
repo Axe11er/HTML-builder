@@ -60,10 +60,10 @@ const mergeFiles = async (entry, output, getFiles) => {
   const files = await getFiles
   files.reverse()
   for (const file of files) {
-    const cssData = await readStream(
+    const data = await readStream(
       createReadStream(`${entry}/${file.name}`)
     )
-    appendFile(output, cssData, 'utf-8')
+    appendFile(output, data, 'utf-8')
   }
 }
 
